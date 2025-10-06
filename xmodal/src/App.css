@@ -1,8 +1,15 @@
+/* Ensure full height for Cypress visibility */
+html, body, #root, .app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .app {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
 }
 
 button {
@@ -14,12 +21,13 @@ button {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0,0,0,0.5);
+  width: 100vw;      /* Full viewport width */
+  height: 100vh;     /* Full viewport height */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;      /* Make sure modal is on top */
 }
 
 .modal-content {

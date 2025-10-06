@@ -20,7 +20,7 @@ function App() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    setErrors({ ...errors, [e.target.id]: "" }); // Clear error on change
+    setErrors({ ...errors, [e.target.id]: "" }); // clear error on change
   };
 
   const handleSubmit = (e) => {
@@ -75,7 +75,7 @@ function App() {
         <div className="modal" onClick={() => setIsModalOpen(false)}>
           <div
             className="modal-content"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
           >
             <form onSubmit={handleSubmit}>
               <div>
