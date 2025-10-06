@@ -1,4 +1,3 @@
-// App.jsx
 import { useState } from "react";
 import "./App.css";
 
@@ -11,58 +10,45 @@ function App() {
     dob: "",
   });
 
-  const [errors, setErrors] = useState({
-    username: "",
-    email: "",
-    phone: "",
-    dob: "",
-  });
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
-    setErrors({ ...errors, [e.target.id]: "" }); // clear error on change
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newErrors = {};
 
-    // Username validation
     if (!formData.username.trim()) {
-      newErrors.username = "Please fill the Username field.";
+      alert("Please fill the Username field.");
+      return;
     }
 
-    // Email validation
     if (!formData.email.trim()) {
-      newErrors.email = "Please fill the Email field.";
+      alert("Please fill the Email field.");
+      return;
     } else if (!formData.email.includes("@")) {
-      newErrors.email = "Invalid email. Please check your email address.";
+      alert("Invalid email. Please check your email address.");
+      return;
     }
 
-    // Phone validation
     if (!formData.phone.trim()) {
-      newErrors.phone = "Please fill the Phone Number field.";
+      alert("Please fill the Phone Number field.");
+      return;
     } else if (!/^\d{10}$/.test(formData.phone)) {
-      newErrors.phone =
-        "Invalid phone number. Please enter a 10-digit phone number.";
+      alert("Invalid phone number. Please enter a 10-digit phone number.");
+      return;
     }
 
-    // DOB validation
     if (!formData.dob.trim()) {
-      newErrors.dob = "Please fill the Date of Birth field.";
+      alert("Please fill the Date of Birth field.");
+      return;
     } else if (new Date(formData.dob) > new Date()) {
-      newErrors.dob =
-        "Invalid date of birth. Please enter a valid past date.";
+      alert("Invalid date of birth. Please enter a valid past date.");
+      return;
     }
 
-    setErrors(newErrors);
-
-    // Submit if no errors
-    if (Object.keys(newErrors).length === 0) {
-      alert("Form submitted successfully!");
-      setFormData({ username: "", email: "", phone: "", dob: "" });
-      setIsModalOpen(false);
-    }
+    alert("Form submitted successfully!");
+    setFormData({ username: "", email: "", phone: "", dob: "" });
+    setIsModalOpen(false);
   };
 
   return (
@@ -72,10 +58,13 @@ function App() {
       )}
 
       {isModalOpen && (
-        <div className="modal" onClick={() => setIsModalOpen(false)}>
+        <div
+          className="modal"
+          onClick={() => setIsModalOpen(false)} // click outside closes modal
+        >
           <div
             className="modal-content"
-            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+            onClick={(e) => e.stopPropagation()} // click inside does NOT close
           >
             <form onSubmit={handleSubmit}>
               <div>
@@ -86,9 +75,6 @@ function App() {
                   value={formData.username}
                   onChange={handleChange}
                 />
-                {errors.username && (
-                  <span className="error">{errors.username}</span>
-                )}
               </div>
 
               <div>
@@ -99,9 +85,6 @@ function App() {
                   value={formData.email}
                   onChange={handleChange}
                 />
-                {errors.email && (
-                  <span className="error">{errors.email}</span>
-                )}
               </div>
 
               <div>
@@ -112,9 +95,6 @@ function App() {
                   value={formData.phone}
                   onChange={handleChange}
                 />
-                {errors.phone && (
-                  <span className="error">{errors.phone}</span>
-                )}
               </div>
 
               <div>
@@ -125,7 +105,6 @@ function App() {
                   value={formData.dob}
                   onChange={handleChange}
                 />
-                {errors.dob && <span className="error">{errors.dob}</span>}
               </div>
 
               <button className="submit-button" type="submit">
