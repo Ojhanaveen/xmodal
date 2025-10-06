@@ -17,7 +17,13 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate Email first
+    // Validate Username
+    if (!formData.username.trim()) {
+      alert("Please fill the Username field.");
+      return;
+    }
+
+    // Validate Email
     if (!formData.email.trim()) {
       alert("Please fill the Email field.");
       return;
@@ -44,13 +50,7 @@ function App() {
       return;
     }
 
-    // Validate Username last
-    if (!formData.username.trim()) {
-      alert("Please fill the Username field.");
-      return;
-    }
-
-    // If all validations pass
+    // All validations passed
     alert("Form submitted successfully!");
     setFormData({ username: "", email: "", phone: "", dob: "" });
     setIsModalOpen(false);
@@ -66,11 +66,11 @@ function App() {
         <div
           className="modal"
           data-testid="overlay"
-          onClick={() => setIsModalOpen(false)}
+          onClick={() => setIsModalOpen(false)} // click outside closes modal
         >
           <div
             className="modal-content"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
           >
             <form onSubmit={handleSubmit}>
               <div>
