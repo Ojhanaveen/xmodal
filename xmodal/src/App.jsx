@@ -17,11 +17,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.username.trim()) {
-      alert("Please fill the Username field.");
-      return;
-    }
-
+    // Validate Email first
     if (!formData.email.trim()) {
       alert("Please fill the Email field.");
       return;
@@ -30,6 +26,7 @@ function App() {
       return;
     }
 
+    // Validate Phone
     if (!formData.phone.trim()) {
       alert("Please fill the Phone Number field.");
       return;
@@ -38,6 +35,7 @@ function App() {
       return;
     }
 
+    // Validate DOB
     if (!formData.dob.trim()) {
       alert("Please fill the Date of Birth field.");
       return;
@@ -46,6 +44,13 @@ function App() {
       return;
     }
 
+    // Validate Username last
+    if (!formData.username.trim()) {
+      alert("Please fill the Username field.");
+      return;
+    }
+
+    // If all validations pass
     alert("Form submitted successfully!");
     setFormData({ username: "", email: "", phone: "", dob: "" });
     setIsModalOpen(false);
@@ -60,11 +65,12 @@ function App() {
       {isModalOpen && (
         <div
           className="modal"
-          onClick={() => setIsModalOpen(false)} // click outside closes modal
+          data-testid="overlay"
+          onClick={() => setIsModalOpen(false)}
         >
           <div
             className="modal-content"
-            onClick={(e) => e.stopPropagation()} // click inside does NOT close
+            onClick={(e) => e.stopPropagation()}
           >
             <form onSubmit={handleSubmit}>
               <div>

@@ -20,8 +20,8 @@ button {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;       /* full viewport width */
-  height: 100vh;      /* full viewport height */
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0,0,0,0.5);
   display: flex;
   justify-content: center;
