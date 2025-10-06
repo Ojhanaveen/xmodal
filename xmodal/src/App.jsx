@@ -1,3 +1,4 @@
+// App.jsx
 import { useState } from "react";
 import "./App.css";
 
@@ -17,13 +18,7 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate Username
-    if (!formData.username.trim()) {
-      alert("Please fill the Username field.");
-      return;
-    }
-
-    // Validate Email
+    // Validate Email first
     if (!formData.email.trim()) {
       alert("Please fill the Email field.");
       return;
@@ -50,7 +45,12 @@ function App() {
       return;
     }
 
-    // All validations passed
+    // Validate Username last
+    if (!formData.username.trim()) {
+      alert("Please fill the Username field.");
+      return;
+    }
+
     alert("Form submitted successfully!");
     setFormData({ username: "", email: "", phone: "", dob: "" });
     setIsModalOpen(false);
@@ -66,11 +66,11 @@ function App() {
         <div
           className="modal"
           data-testid="overlay"
-          onClick={() => setIsModalOpen(false)} // click outside closes modal
+          onClick={() => setIsModalOpen(false)} // overlay click closes modal
         >
           <div
             className="modal-content"
-            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+            onClick={(e) => e.stopPropagation()} // prevent inner click from closing
           >
             <form onSubmit={handleSubmit}>
               <div>
