@@ -1,5 +1,5 @@
 // App.jsx
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
 
 function App() {
@@ -11,79 +11,58 @@ function App() {
     dob: "",
   });
 
-  const modalRef = useRef(null);
-
-  // Close modal if clicked outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setIsModalOpen(false);
-      }
-    }
-
-    if (isModalOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isModalOpen]);
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    phone: "",
+    dob: "",
+  });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    setErrors({ ...errors, [e.target.id]: "" }); // Clear error on change
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const newErrors = {};
 
-    const { username, email, phone, dob } = formData;
-
-    // Check for empty fields
-    if (!username.trim()) {
-      alert("Please fill the Username field.");
-      return;
-    }
-    if (!email.trim()) {
-      alert("Please fill the Email field.");
-      return;
-    }
-    if (!phone.trim()) {
-      alert("Please fill the Phone Number field.");
-      return;
-    }
-    if (!dob.trim()) {
-      alert("Please fill the Date of Birth field.");
-      return;
+    // Username validation
+    if (!formData.username.trim()) {
+      newErrors.username = "Please fill the Username field.";
     }
 
     // Email validation
-    if (!email.includes("@")) {
-      alert("Invalid email. Please check your email address.");
-      return;
+    if (!formData.email.trim()) {
+      newErrors.email = "Please fill the Email field.";
+    } else if (!formData.email.includes("@")) {
+      newErrors.email = "Invalid email. Please check your email address.";
     }
 
-    // Phone validation (10 digits)
-    const phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(phone)) {
-      alert("Invalid phone number. Please enter a 10-digit phone number.");
-      return;
+    // Phone validation
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Please fill the Phone Number field.";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone =
+        "Invalid phone number. Please enter a 10-digit phone number.";
     }
 
-    // DOB validation (no future dates)
-    const today = new Date();
-    const enteredDate = new Date(dob);
-    if (enteredDate > today) {
-      alert("Invalid date of birth. Please enter a valid past date.");
-      return;
+    // DOB validation
+    if (!formData.dob.trim()) {
+      newErrors.dob = "Please fill the Date of Birth field.";
+    } else if (new Date(formData.dob) > new Date()) {
+      newErrors.dob =
+        "Invalid date of birth. Please enter a valid past date.";
     }
 
-    // If all validations pass
-    alert("Form submitted successfully!");
-    setFormData({ username: "", email: "", phone: "", dob: "" });
-    setIsModalOpen(false);
+    setErrors(newErrors);
+
+    // Submit if no errors
+    if (Object.keys(newErrors).length === 0) {
+      alert("Form submitted successfully!");
+      setFormData({ username: "", email: "", phone: "", dob: "" });
+      setIsModalOpen(false);
+    }
   };
 
   return (
@@ -93,8 +72,11 @@ function App() {
       )}
 
       {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content" ref={modalRef}>
+        <div className="modal" onClick={() => setIsModalOpen(false)}>
+          <div
+            className="modal-content"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+          >
             <form onSubmit={handleSubmit}>
               <div>
                 <label>Username:</label>
@@ -104,6 +86,9 @@ function App() {
                   value={formData.username}
                   onChange={handleChange}
                 />
+                {errors.username && (
+                  <span className="error">{errors.username}</span>
+                )}
               </div>
 
               <div>
@@ -114,6 +99,9 @@ function App() {
                   value={formData.email}
                   onChange={handleChange}
                 />
+                {errors.email && (
+                  <span className="error">{errors.email}</span>
+                )}
               </div>
 
               <div>
@@ -124,6 +112,9 @@ function App() {
                   value={formData.phone}
                   onChange={handleChange}
                 />
+                {errors.phone && (
+                  <span className="error">{errors.phone}</span>
+                )}
               </div>
 
               <div>
@@ -134,6 +125,7 @@ function App() {
                   value={formData.dob}
                   onChange={handleChange}
                 />
+                {errors.dob && <span className="error">{errors.dob}</span>}
               </div>
 
               <button className="submit-button" type="submit">
